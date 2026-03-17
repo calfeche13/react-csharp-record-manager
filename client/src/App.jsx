@@ -12,7 +12,7 @@ export default function App() {
   // NEW: State to manage our custom Toast notifications
   const [toast, setToast] = useState(null);
 
-  const API_URL = "http://localhost:5011/api/v1/records";
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // --- Helper to show Toast ---
   const showToast = (message, type = "success") => {
