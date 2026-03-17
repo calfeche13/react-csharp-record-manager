@@ -1,5 +1,5 @@
 using Server.Models;
-using Server.Repositories;
+using Server.Services;
 
 namespace Server.Endpoints;
 
@@ -11,19 +11,23 @@ public static class RecordEndpoints
         var api = app.MapGroup("/api/v1/records");
 
         // GET: /api/v1/records
-        api.MapGet("/", (IRecordRepository repo) => 
+        app.MapGet("/api/v1/records", (IRecordService service) =>
         {
-            return Results.Ok(repo.GetAll());
+            return Results.Ok(service.GetAllRecords());
         });
 
         // PUT: /api/v1/records/{id}
-        api.MapPut("/{id}", (int id, RecordItem updatedRecord, IRecordRepository repo) =>
+
+        app.MapPut("/api/v1/records/{id}", (int id, RecordItem record, IRecordService service) =>
         {
-            var result = repo.Update(id, updatedRecord);
-            
-            if (result == null) return Results.NotFound();
-            
-            return Results.Ok(result);
+            var updated = service.UpdateRecord(id, record);
+
+            if (updated == null)
+            {
+                return Results.NotFound(new { message = "Record not found or validation failed" });
+            }
+
+            return Results.Ok(updated);
         });
     }
 }

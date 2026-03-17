@@ -1,5 +1,6 @@
 using Server.Repositories;
 using Server.Endpoints;
+using Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSingleton<IRecordRepository, RecordRepository>();
+builder.Services.AddScoped<IRecordService, RecordService>();
 
 var app = builder.Build();
 
